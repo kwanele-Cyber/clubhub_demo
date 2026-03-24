@@ -1,4 +1,4 @@
-how to run the app 
+# how to run the app 
 
 1. create and start the python environment
 ```bash
@@ -7,15 +7,15 @@ python -m venv clubhub-venv
 ```
 
 2. Install all the requirements
-   ```bash
+```bash
    pip install -r requirements.txt
-   ```
+```
 3. Initialise the database
-   ```bash
+```bash
    python init_db.py
-   ```
+```
 
 4. run the application
-   ```bash
+```bash
   python run.py
-   ```
+```
