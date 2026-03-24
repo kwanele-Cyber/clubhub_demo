@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Clubs{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Student Clubs</h1>
+    <a href="{{ url_for('clubs.create_club') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Create New Club
+    </a>
+</div>
+
+<div class="row">
+    {% for club in clubs %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            {% if club.logo_url %}
+            <img src="{{ club.logo_url }}" class="card-img-top" alt="{{ club.name }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                <i class="fas fa-users fa-4x text-secondary"></i>
+            </div>
+            {% endif %}
+            
+            <div class="card-body">
+                <h5 class="card-title">{{ club.name }}</h5>
+                <p class="card-text">{{ club.description[:150] }}{% if club.description|length > 150 %}...{% endif %}</p>
+                
+                <div class="mb-2">
+                    <span class="badge bg-primary">{{ club.category }}</span>
+                    {% if club.id in user_memberships %}
+                        {% set membership = user_memberships[club.id] %}
+                        {% if membership.status == 'approved' %}
+                            <span class="badge bg-success">Member</span>
+                        {% elif membership.status == 'pending' %}
+                            <span class="badge bg-warning">Pending</span>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                
+                <p class="card-text">
+                    <small class="text-muted">
+                        <i class="fas fa-users"></i> {{ club.memberships|selectattr('status', 'equalto', 'approved')|list|length }} members
+                    </small>
+                </p>
+                
+                {% if club.id in pending_requests %}
+                <p class="card-text">
+                    <span class="badge bg-info">
+                        <i class="fas fa-clock"></i> {{ pending_requests[club.id] }} pending request(s)
+                    </span>
+                </p>
+                {% endif %}
+            </div>
+            
+            <div class="card-footer bg-transparent">
+                <a href="{{ url_for('clubs.view_club', club_id=club.id) }}" class="btn btn-outline-primary w-100">
+                    View Club
+                </a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> No clubs found. 
+            <a href="{{ url_for('clubs.create_club') }}" class="alert-link">Create the first club!</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
