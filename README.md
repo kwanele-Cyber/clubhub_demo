@@ -1,5 +1,8 @@
 # how to run the app 
 
+hi 
+
+
 1. create and start the python environment
 ```bash
 python -m venv clubhub-venv
